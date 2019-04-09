@@ -14,12 +14,10 @@ public class StartUpController : Controller
     public override void Execute(object data)
     {
         //注册controller
-        
-
+        RegisterController(Consts.E_EnterScene,typeof(EnterSceneController));
         //注册model
-
+        RegisterModel(new GameModel());
         //完成跳转场景
-
         
     }
 }

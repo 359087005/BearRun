@@ -30,10 +30,10 @@ public class Game : MonoSingleton<Game>
         soundManager = SoundManager.Instance;
         staticData = StaticData.Instance;
 
-        //游戏启动
-
         //初始化
         RegisterController(Consts.E_StartUp, typeof(StartUpController));
+        //游戏启动
+        SendEvent(Consts.E_StartUp);
         //跳场景
         Game.Instance.LoadLevel(2);
     }
@@ -45,9 +45,7 @@ public class Game : MonoSingleton<Game>
         {
             scenesIndex = SceneManager.GetActiveScene().buildIndex
         };
-
         SendEvent(Consts.E_ExitScene, e);
-
         //开始新场景事件
         SceneManager.LoadScene(level);
     }

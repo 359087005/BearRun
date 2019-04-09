@@ -15,7 +15,7 @@ public static class Consts
     public const string E_StartUp = "StartUp";
 
     //model  
-
+    public const string M_GameModel = "GameModel";
     //view
     public const string V_PlayerMove = "PlayerMove";
 

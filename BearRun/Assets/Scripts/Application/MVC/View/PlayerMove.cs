@@ -35,12 +35,29 @@ public class PlayerMove : View
 
     int m_nowIndex = 1;     //左中右三条
     int m_targetIndex = 1;
-    float m_offset;   //左移右移偏移量
-    float m_MoveSpeed = 13;
+    float m_xOffset;   //左移右移偏移量
+    float m_MoveSpeed = 13;//左移右移移动速度
+
+
+
+    float m_yOffset;
+    const float gravity = 9.8f;
+    const float m_JumpValue = 5;
+
+    float m_sliderTime;
+    bool m_isSlide = false;
+
+    float m_moveCount;
+    float m_moveAddDis = 200;
+    float m_moveAddSpeed = 2;
+    float m_MaxSpeed = 40;
+
+    GameModel gm;
 
     private void Awake()
     {
         m_cc = this.GetComponent<CharacterController>();
+        gm = GetModel<GameModel>();
     }
 
     private void Start()
@@ -52,8 +69,14 @@ public class PlayerMove : View
     {
         while (true)
         {
-            m_cc.Move(transform.forward * speed * Time.deltaTime);
-            UpdatePositon();
+            if (!gm.m_isPause && gm.m_isPlay)
+            {
+                m_yOffset -= gravity * Time.deltaTime;
+                m_cc.Move((transform.forward * speed + new Vector3(0, m_yOffset, 0)) * Time.deltaTime);
+                MoveControl();
+                UpdateSpeed();
+                UpdatePositon();
+            }
             yield return 0;
         }
     }
@@ -62,9 +85,9 @@ public class PlayerMove : View
     /// </summary>
     void GetInputDir()
     {
+        m_InputDir = InputDir.NULL;
         if (Input.GetMouseButtonDown(0))
         {
-            m_InputDir = InputDir.NULL;
             activeInput = true;
             m_mousePos = Input.mousePosition;
         }
@@ -123,28 +146,92 @@ public class PlayerMove : View
                 if (m_targetIndex > 0)
                 {
                     m_targetIndex--;
-                    m_offset = -2;
+                    m_xOffset = -2;
+                    SendMessage("AnimManager", m_InputDir);
                 }
                 break;
             case InputDir.UP:
+                if (m_cc.isGrounded)
+                {
+                    m_yOffset = m_JumpValue;
+                    SendMessage("AnimManager",m_InputDir);
+                }
                 break;
             case InputDir.RIGHT:
                 if (m_targetIndex < 2)
                 {
                     m_targetIndex++;
-                    m_offset = 2;
+                    m_xOffset = 2;
+                    SendMessage("AnimManager", m_InputDir);
                 }
                 break;
             case InputDir.DOWN:
+                if (m_isSlide == false)
+                {
+                    m_isSlide = true;
+                    m_sliderTime = 0.733f;
+                    SendMessage("AnimManager",m_InputDir);
+                }
                 break;
         }
+
     }
 
     void MoveControl()
     {
         if (m_targetIndex != m_nowIndex)
         {
-            float move = Mathf.Lerp(0,m_offset, m_MoveSpeed * Time.deltaTime);
+            float move = Mathf.Lerp(0,m_xOffset, m_MoveSpeed * Time.deltaTime);
+            transform.position += new Vector3(move,0,0);
+            m_xOffset -= move;
+
+            if (Mathf.Abs(m_xOffset) < 0.05f)
+            {
+                m_xOffset = 0;
+                m_nowIndex = m_targetIndex;
+
+                switch (m_nowIndex)
+                {
+                    case 0:
+                        transform.position = new Vector3(-2,transform.position.y,transform.position.z);
+                        break;
+                    case 1:
+                        transform.position = new Vector3(0, transform.position.y, transform.position.z);
+                        break;
+                    case 2:
+                        transform.position = new Vector3(2, transform.position.y, transform.position.z);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
+        if (m_isSlide)
+        {
+            m_sliderTime -= Time.deltaTime;
+            if (m_sliderTime < 0)
+            {
+                m_isSlide = false;
+                m_sliderTime = 0;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 速度限制
+    /// </summary>
+    void UpdateSpeed()
+    {
+        m_moveCount += speed * Time.deltaTime;
+        if (m_moveCount > m_moveAddDis)
+        {
+            m_moveCount = 0;
+            if (speed < m_MaxSpeed)
+            {
+                speed += m_moveAddSpeed;
+            }
         }
     }
 }
