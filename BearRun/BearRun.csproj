@@ -289,16 +289,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Application\Args\DistanceArgs.cs" />
     <Compile Include="Assets\Scripts\Application\Args\ScenesArgs.cs" />
     <Compile Include="Assets\Scripts\Application\Consts.cs" />
     <Compile Include="Assets\Scripts\Application\Game.cs" />
     <Compile Include="Assets\Scripts\Application\Misc\AnimationManager.cs" />
     <Compile Include="Assets\Scripts\Application\Misc\FollowPlayer.cs" />
     <Compile Include="Assets\Scripts\Application\Misc\RoadChange.cs" />
+    <Compile Include="Assets\Scripts\Application\MVC\Controller\EndGameController.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\Controller\EnterSceneController.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\Controller\StartUpController.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\Model\GameModel.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\View\PlayerMove.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Effect.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Items\AddTime.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Items\Coin.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Items\Invincible.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Items\Item.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Items\Magnet.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Items\Multiple.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Obstacles\Car.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Obstacles\Obstacles.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Obstacles\People.cs" />
     <Compile Include="Assets\Scripts\Application\StaticData\StaticData.cs" />
     <Compile Include="Assets\Scripts\FrameWork\MVC\Controller.cs" />
     <Compile Include="Assets\Scripts\FrameWork\MVC\Model.cs" />
@@ -310,6 +322,7 @@
     <Compile Include="Assets\Scripts\FrameWork\Pool\SubPool.cs" />
     <Compile Include="Assets\Scripts\FrameWork\Singleton\MonoSingleton.cs" />
     <Compile Include="Assets\Scripts\FrameWork\Sound\SoundManager.cs" />
+    <Compile Include="Assets\UIBoard.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Res\Shader\Curved.shader" />

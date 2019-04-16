@@ -58,11 +58,101 @@ public class PlayerMove : View
     {
         m_cc = this.GetComponent<CharacterController>();
         gm = GetModel<GameModel>();
+        m_SkillTime = gm.m_SkillTime;
+
+        //子物体 吸铁石collider
+        m_MagnetCollider = GetComponentInChildren<SphereCollider>();
     }
 
     private void Start()
     {
         StartCoroutine(UpdateAction());
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            gm.m_isPause = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.M))
+        {
+            gm.m_isPause = false;
+        }
+    }
+
+    /// <summary>
+    /// 碰撞检测
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == Consts.TAG_BigFence)
+        {
+            if (m_isInvincible) return;
+            if (m_isSlide == true) return;
+            other.gameObject.SendMessage("HitPlayer", transform.position);
+            //播放声音
+            Game.Instance.soundManager.PlayEffect("Se_UI_Hit");
+            HitObstacles();
+        }
+        else if (other.tag == Consts.TAG_SmallFence)
+        {
+            if (m_isInvincible) return;
+            other.gameObject.SendMessage("HitPlayer", transform.position);
+            //播放声音
+            Game.Instance.soundManager.PlayEffect("Se_UI_Hit");
+            HitObstacles();
+        }
+        else if (other.tag == Consts.TAG_Block)
+        {
+            other.gameObject.SendMessage("HitPlayer", transform.position);
+            Game.Instance.soundManager.PlayEffect("Se_UI_End");
+            //游戏结束  弹出面板  isplay = false
+            SendEvent(Consts.E_EndGame);
+        }
+        else if (other.tag == Consts.TAG_SmallBlock)
+        {
+            other.transform.parent.parent.SendMessage("HitPlayer", transform.position);
+            Game.Instance.soundManager.PlayEffect("Se_UI_End");
+            //游戏结束  弹出面板  isplay = false
+            SendEvent(Consts.E_EndGame);
+        }
+        else if (other.tag == Consts.TAG_BeforeTrigger)
+        {
+            other.transform.parent.SendMessage("HitTrigger",SendMessageOptions.RequireReceiver);
+        }
+    }
+    //记录速度  撞到陷阱时使用
+    float m_curSpeed;
+    //恢复速度 的速度
+    float m_AddRate = 10;
+    //是否处于撞击状态
+    bool m_IsHit = false;
+    /// <summary>
+    /// 碰撞陷阱减速
+    /// </summary>
+    public void HitObstacles()
+    {
+        if (m_IsHit)
+            return;
+        m_IsHit = true;
+        m_curSpeed = speed;
+        speed = 0;
+        StartCoroutine(RecoverySpeed());
+    }
+    /// <summary>
+    /// 速度恢复
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator RecoverySpeed()
+    {
+        while (speed < m_curSpeed)
+        {
+            speed += Time.deltaTime * m_AddRate;
+            yield return 0;
+        }
+        m_IsHit = false;
     }
 
     IEnumerator UpdateAction()
@@ -71,6 +161,10 @@ public class PlayerMove : View
         {
             if (!gm.m_isPause && gm.m_isPlay)
             {
+                //更新UI
+                UpdateDis();
+
+
                 m_yOffset -= gravity * Time.deltaTime;
                 m_cc.Move((transform.forward * speed + new Vector3(0, m_yOffset, 0)) * Time.deltaTime);
                 MoveControl();
@@ -79,6 +173,12 @@ public class PlayerMove : View
             }
             yield return 0;
         }
+    }
+
+    void UpdateDis()
+    {
+        DistanceArgs e = new DistanceArgs() { distance = (int)transform.position.z};
+        SendEvent(Consts.E_UpdateDis,e);
     }
     /// <summary>
     /// 获取朝向
@@ -148,13 +248,7 @@ public class PlayerMove : View
                     m_targetIndex--;
                     m_xOffset = -2;
                     SendMessage("AnimManager", m_InputDir);
-                }
-                break;
-            case InputDir.UP:
-                if (m_cc.isGrounded)
-                {
-                    m_yOffset = m_JumpValue;
-                    SendMessage("AnimManager",m_InputDir);
+                    Game.Instance.soundManager.PlayEffect("Se_UI_Huadong");
                 }
                 break;
             case InputDir.RIGHT:
@@ -163,18 +257,28 @@ public class PlayerMove : View
                     m_targetIndex++;
                     m_xOffset = 2;
                     SendMessage("AnimManager", m_InputDir);
+                    Game.Instance.soundManager.PlayEffect("Se_UI_Huadong");
                 }
                 break;
+            case InputDir.UP:
+                if (m_cc.isGrounded)
+                {
+                    m_yOffset = m_JumpValue;
+                    SendMessage("AnimManager",m_InputDir);
+                    Game.Instance.soundManager.PlayEffect("Se_UI_Jump");
+                }
+                break;
+          
             case InputDir.DOWN:
                 if (m_isSlide == false)
                 {
                     m_isSlide = true;
                     m_sliderTime = 0.733f;
                     SendMessage("AnimManager",m_InputDir);
+                    Game.Instance.soundManager.PlayEffect("Se_UI_Slide");
                 }
                 break;
         }
-
     }
 
     void MoveControl()
@@ -220,7 +324,7 @@ public class PlayerMove : View
     }
 
     /// <summary>
-    /// 速度限制
+    /// 最大速度限制
     /// </summary>
     void UpdateSpeed()
     {
@@ -233,5 +337,93 @@ public class PlayerMove : View
                 speed += m_moveAddSpeed;
             }
         }
+    }
+
+
+    int m_Multiply = 1;
+    float m_SkillTime;
+
+    IEnumerator MultiplyCor;  //保持双倍金币的唯一性
+    /// <summary>
+    /// 吃金币
+    /// </summary>
+    public void HitCoin()
+    {
+        print("吃金币~~~~~~~");
+    }
+
+    /// <summary>
+    /// 双倍金币
+    /// </summary>
+    public void HitMultiply()
+    {
+        if (MultiplyCor != null)
+        {
+            StopCoroutine(MultiplyCor);
+        }
+        MultiplyCor = MultiplyCoroutine();
+        StartCoroutine(MultiplyCor);
+    }
+
+    IEnumerator MultiplyCoroutine()
+    {
+        m_Multiply = 2;
+        yield return new WaitForSeconds(m_SkillTime);
+        m_Multiply = 1;
+    }
+
+
+
+    SphereCollider m_MagnetCollider;
+    IEnumerator MagnetCor;
+    /// <summary>
+    /// 吸铁石
+    /// </summary>
+    void HitMagnet()
+    {
+        if (MagnetCor != null)
+        {
+            StopCoroutine(MagnetCor);
+        }
+        MagnetCor = MangetCoroutine();
+        StartCoroutine(MagnetCor);
+    }
+    IEnumerator MangetCoroutine()
+    {
+        m_MagnetCollider.enabled = true;
+        yield return new WaitForSeconds(m_SkillTime);
+        m_MagnetCollider.enabled = false;
+    }
+
+    /// <summary>
+    /// 时间增加
+    /// </summary>
+    public void HitAddTime()
+    {
+        print("Time Add");
+        //发消息 加时间
+    }
+
+
+    bool m_isInvincible = false;
+    IEnumerator InvincibleCor;
+    /// <summary>
+    /// 无敌状态
+    /// </summary>
+    public void HitInvincible()
+    {
+        if (InvincibleCor != null)
+        {
+            StopCoroutine(InvincibleCor);
+        }
+        InvincibleCor = InvincibleCoroutine();
+        StartCoroutine(InvincibleCor);
+    }
+
+    IEnumerator InvincibleCoroutine()
+    {
+        m_isInvincible = true;
+        yield return new WaitForSeconds(m_SkillTime);
+        m_isInvincible = false;
     }
 }

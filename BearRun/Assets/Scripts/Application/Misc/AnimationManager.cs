@@ -9,22 +9,36 @@
 using System;
 using UnityEngine;
 
-public class AnimationManager : MonoBehaviour
+public class AnimationManager : View
 {
     Animation anim;
     Action playAnim;
+
+    GameModel gm;
+    public override string Name
+    {
+        get
+        {
+            return Consts.V_AnimationManager;
+        }
+    }
 
     void Awake()
     {
         anim = this.GetComponent<Animation>();
         playAnim = PlayRun;
+        gm = GetModel<GameModel>();
     }
 
     void Update()
     {
         if (playAnim != null)
         {
-            playAnim();
+            if (!gm.m_isPause && gm.m_isPlay)
+                playAnim();
+            else
+
+                anim.Stop();
         }
     }
 
@@ -83,5 +97,10 @@ public class AnimationManager : MonoBehaviour
                 playAnim = PlayRoll;
                 break;
         }
+    }
+
+    public override void HandleEvent(string name, object data)
+    {
+        throw new NotImplementedException();
     }
 }

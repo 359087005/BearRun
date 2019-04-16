@@ -20,6 +20,6 @@ public class GameModel : Model
     }
     public bool m_isPlay = true;
     public bool m_isPause = false;
-
+    public float m_SkillTime = 5;
 
 }

@@ -20,6 +20,8 @@ public class EnterSceneController : Controller
                 break;
             case 2:
                 RegisterView(GameObject.FindWithTag(Consts.TAG_Player).GetComponent<PlayerMove>());
+                RegisterView(GameObject.FindWithTag(Consts.TAG_Player).GetComponent<AnimationManager>());
+                RegisterView(GameObject.Find("Canvas").transform.Find("UIBoard").GetComponent<UIBoard>());
                 break;
         }
     }
