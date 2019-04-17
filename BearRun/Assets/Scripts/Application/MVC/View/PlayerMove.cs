@@ -25,7 +25,6 @@ public class PlayerMove : View
 
     }
 
-
     CharacterController m_cc;
     public float speed = 20;
 
@@ -38,9 +37,7 @@ public class PlayerMove : View
     float m_xOffset;   //左移右移偏移量
     float m_MoveSpeed = 13;//左移右移移动速度
 
-
-
-    float m_yOffset;
+    float m_yOffset;    //y轴偏移量
     const float gravity = 9.8f;
     const float m_JumpValue = 5;
 
@@ -120,7 +117,7 @@ public class PlayerMove : View
         }
         else if (other.tag == Consts.TAG_BeforeTrigger)
         {
-            other.transform.parent.SendMessage("HitTrigger",SendMessageOptions.RequireReceiver);
+            other.transform.parent.SendMessage("HitTrigger", SendMessageOptions.RequireReceiver);
         }
     }
     //记录速度  撞到陷阱时使用
@@ -164,7 +161,6 @@ public class PlayerMove : View
                 //更新UI
                 UpdateDis();
 
-
                 m_yOffset -= gravity * Time.deltaTime;
                 m_cc.Move((transform.forward * speed + new Vector3(0, m_yOffset, 0)) * Time.deltaTime);
                 MoveControl();
@@ -177,8 +173,8 @@ public class PlayerMove : View
 
     void UpdateDis()
     {
-        DistanceArgs e = new DistanceArgs() { distance = (int)transform.position.z};
-        SendEvent(Consts.E_UpdateDis,e);
+        DistanceArgs e = new DistanceArgs() { distance = (int)transform.position.z };
+        SendEvent(Consts.E_UpdateDis, e);
     }
     /// <summary>
     /// 获取朝向
@@ -264,17 +260,17 @@ public class PlayerMove : View
                 if (m_cc.isGrounded)
                 {
                     m_yOffset = m_JumpValue;
-                    SendMessage("AnimManager",m_InputDir);
+                    SendMessage("AnimManager", m_InputDir);
                     Game.Instance.soundManager.PlayEffect("Se_UI_Jump");
                 }
                 break;
-          
+
             case InputDir.DOWN:
                 if (m_isSlide == false)
                 {
                     m_isSlide = true;
                     m_sliderTime = 0.733f;
-                    SendMessage("AnimManager",m_InputDir);
+                    SendMessage("AnimManager", m_InputDir);
                     Game.Instance.soundManager.PlayEffect("Se_UI_Slide");
                 }
                 break;
@@ -285,8 +281,8 @@ public class PlayerMove : View
     {
         if (m_targetIndex != m_nowIndex)
         {
-            float move = Mathf.Lerp(0,m_xOffset, m_MoveSpeed * Time.deltaTime);
-            transform.position += new Vector3(move,0,0);
+            float move = Mathf.Lerp(0, m_xOffset, m_MoveSpeed * Time.deltaTime);
+            transform.position += new Vector3(move, 0, 0);
             m_xOffset -= move;
 
             if (Mathf.Abs(m_xOffset) < 0.05f)
@@ -297,7 +293,7 @@ public class PlayerMove : View
                 switch (m_nowIndex)
                 {
                     case 0:
-                        transform.position = new Vector3(-2,transform.position.y,transform.position.z);
+                        transform.position = new Vector3(-2, transform.position.y, transform.position.z);
                         break;
                     case 1:
                         transform.position = new Vector3(0, transform.position.y, transform.position.z);
@@ -340,18 +336,51 @@ public class PlayerMove : View
     }
 
 
-    int m_Multiply = 1;
     float m_SkillTime;
 
-    IEnumerator MultiplyCor;  //保持双倍金币的唯一性
     /// <summary>
     /// 吃金币
     /// </summary>
     public void HitCoin()
     {
-        print("吃金币~~~~~~~");
+        CoinArgs e = new CoinArgs() { coin = m_Multiply };
+        SendEvent(Consts.E_UpdateCoin, e);
     }
 
+    /// <summary>
+    /// 时间增加
+    /// </summary>
+    public void HitAddTime()
+    {
+        print("Time Add");
+        //发消息 加时间
+        SendEvent(Consts.E_HitAddTime);
+    }
+
+    public void HitItem(ItemKind item)
+    {
+        ItemArgs e = new ItemArgs()
+        {
+            count = 0,
+            kind = item
+        };
+        SendEvent(Consts.E_HitItem, e);
+        //switch (item)
+        //{
+        //    case ItemKind.invincibleItem:
+        //        send
+        //        break;
+        //    case ItemKind.multipleItem:
+
+        //        break;
+        //    case ItemKind.magnetItem:
+
+        //        break;
+        //}
+    }
+
+    int m_Multiply = 1;
+    IEnumerator MultiplyCor;  //保持双倍金币的唯一性
     /// <summary>
     /// 双倍金币
     /// </summary>
@@ -368,18 +397,22 @@ public class PlayerMove : View
     IEnumerator MultiplyCoroutine()
     {
         m_Multiply = 2;
-        yield return new WaitForSeconds(m_SkillTime);
+        float timer = m_SkillTime;
+        while (timer > 0)
+        {
+            if (gm.m_isPlay && !gm.m_isPause)
+                timer -= Time.deltaTime;
+            yield return 0;
+        }
+        //yield return new WaitForSeconds(m_SkillTime);
         m_Multiply = 1;
     }
-
-
-
     SphereCollider m_MagnetCollider;
     IEnumerator MagnetCor;
     /// <summary>
     /// 吸铁石
     /// </summary>
-    void HitMagnet()
+    public void HitMagnet()
     {
         if (MagnetCor != null)
         {
@@ -391,19 +424,16 @@ public class PlayerMove : View
     IEnumerator MangetCoroutine()
     {
         m_MagnetCollider.enabled = true;
-        yield return new WaitForSeconds(m_SkillTime);
+        float timer = m_SkillTime;
+        while (timer > 0)
+        {
+            if (gm.m_isPlay && !gm.m_isPause)
+                timer -= Time.deltaTime;
+            yield return 0;
+        }
+        //yield return new WaitForSeconds(m_SkillTime);
         m_MagnetCollider.enabled = false;
     }
-
-    /// <summary>
-    /// 时间增加
-    /// </summary>
-    public void HitAddTime()
-    {
-        print("Time Add");
-        //发消息 加时间
-    }
-
 
     bool m_isInvincible = false;
     IEnumerator InvincibleCor;
@@ -423,7 +453,14 @@ public class PlayerMove : View
     IEnumerator InvincibleCoroutine()
     {
         m_isInvincible = true;
-        yield return new WaitForSeconds(m_SkillTime);
+        float timer = m_SkillTime;
+        while (timer > 0)
+        {
+            if (gm.m_isPlay && !gm.m_isPause)
+                timer -= Time.deltaTime;
+            yield return 0;
+        }
+        //yield return new WaitForSeconds(m_SkillTime);
         m_isInvincible = false;
     }
 }

@@ -15,7 +15,7 @@ public class Magnet : Item
         if (other.tag == Consts.TAG_Player)
         {
             HitPlayer(other.transform);
-            other.SendMessage("HitMagnet", SendMessageOptions.RequireReceiver);
+            other.SendMessage("HitItem",ItemKind.magnetItem);
         }
     }
 

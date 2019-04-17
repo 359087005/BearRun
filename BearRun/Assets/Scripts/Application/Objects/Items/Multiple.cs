@@ -35,7 +35,7 @@ public class Multiple : Item
         if (other.tag == Consts.TAG_Player)
         {
             HitPlayer(other.transform);
-            other.SendMessage("HitMultiply", SendMessageOptions.RequireReceiver);
+            other.SendMessage("HitItem", ItemKind.multipleItem);
         }
     }
 }

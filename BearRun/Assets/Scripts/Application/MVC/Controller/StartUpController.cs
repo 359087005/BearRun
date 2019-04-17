@@ -16,10 +16,14 @@ public class StartUpController : Controller
         //注册controller
         RegisterController(Consts.E_EnterScene,typeof(EnterSceneController));
         RegisterController(Consts.E_EndGame,typeof(EndGameController));
-
+        RegisterController(Consts.E_PauseGame, typeof(PauseGameController));
+        RegisterController(Consts.E_ResumeGame,typeof(ResumeGameController));
+        RegisterController(Consts.E_HitItem,typeof(HitItemController));
         //注册model
         RegisterModel(new GameModel());
-        //完成跳转场景
-        
+
+       //初始化
+        GameModel gm = GetModel<GameModel>();
+        gm.Init();
     }
 }

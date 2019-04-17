@@ -15,16 +15,21 @@ public static class Consts
     public const string E_StartUp = "StartUp";
     public const string E_EndGame = "EndGame";
 
+    public const string E_PauseGame = "PauseGame";
+    public const string E_ResumeGame = "ResumeGame";
+
     public const string E_UpdateDis = "UpdateDis"; //distanceArgs
     public const string E_UpdateCoin = "UpdateCoin";//CoinArgs
+    public const string E_HitAddTime = "HitAddTime";
+    public const string E_HitItem = "HitItem"; //吃到的还是点击到的ItemArgs
     //model  
     public const string M_GameModel = "GameModel";
-
     //view
     public const string V_PlayerMove = "PlayerMove";
     public const string V_AnimationManager = "AnimationManager";
     public const string V_Board = "UIBoard";
-
+    public const string V_Pause = "UIPause";
+    public const string V_Resume = "UIResume";
 
     //tag标签
     public const string TAG_Road = "Road";
@@ -41,5 +46,12 @@ public static class Consts
 
 public enum InputDir
 {
-    NULL,LEFT,UP,RIGHT,DOWN
+    NULL, LEFT, UP, RIGHT, DOWN
+}
+
+public enum ItemKind
+{
+    invincibleItem,
+    multipleItem,
+    magnetItem
 }

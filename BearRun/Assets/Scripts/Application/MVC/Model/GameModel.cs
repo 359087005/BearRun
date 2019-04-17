@@ -21,5 +21,15 @@ public class GameModel : Model
     public bool m_isPlay = true;
     public bool m_isPause = false;
     public float m_SkillTime = 5;
+    public int m_Magnet;
+    public int m_Multiple;
+    public int m_Invincible;
 
+    public void Init()
+    {
+        m_Magnet = 1;
+        m_Multiple = 2;
+        m_Invincible = 3;
+        m_SkillTime = 5;
+    }
 }
