@@ -22,6 +22,14 @@ public static class Consts
     public const string E_UpdateCoin = "UpdateCoin";//CoinArgs
     public const string E_HitAddTime = "HitAddTime";
     public const string E_HitItem = "HitItem"; //吃到的还是点击到的ItemArgs
+
+    public const string E_FinalShowUI = "FinalShowUI";
+
+    public const string E_BriberyClick = "BriberyClick";//贿赂
+
+    //resume播放完成继续游戏
+    public const string E_ContinueGame = "ContinueGame";
+
     //model  
     public const string M_GameModel = "GameModel";
     //view
@@ -30,7 +38,8 @@ public static class Consts
     public const string V_Board = "UIBoard";
     public const string V_Pause = "UIPause";
     public const string V_Resume = "UIResume";
-
+    public const string V_Dead = "UIDead";
+    public const string V_FinalScore = "UIFinalScore";
     //tag标签
     public const string TAG_Road = "Road";
     public const string TAG_Player = "Player";
@@ -40,7 +49,6 @@ public static class Consts
     public const string TAG_SmallBlock = "SmallBlock"; //小集装箱
 
     public const string TAG_BeforeTrigger = "BeforeTrigger";//物体移动trigger
-
     public const string Tag_MagnetCollider = "MagnetCollider";//吸铁石collider
 }
 

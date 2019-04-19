@@ -24,18 +24,18 @@ public class Magnet : Item
         Game.Instance.soundManager.PlayEffect("Se_UI_Magnet");
 
         //回收
-        //Game.Instance.objectPool.UnSpawn(gameObject);
-        Destroy(this.gameObject);
+        Game.Instance.objectPool.UnSpawn(gameObject);
+        //Destroy(this.gameObject);
     }
 
     public override void OnSpawn()
     {
-       
+        base.OnSpawn();
     }
 
     public override void OnUnSpawn()
     {
-      
+        base.OnUnSpawn();
     }
 
     

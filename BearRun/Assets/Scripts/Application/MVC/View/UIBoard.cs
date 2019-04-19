@@ -281,7 +281,8 @@ public class UIBoard : View
         SendEvent(Consts.E_HitItem, e);
     }
 
-
+    public void Show() { gameObject.SetActive(true); }
+    public void Hide() { gameObject.SetActive(false); }
 
 
     private void Awake()

@@ -19,6 +19,9 @@ public class StartUpController : Controller
         RegisterController(Consts.E_PauseGame, typeof(PauseGameController));
         RegisterController(Consts.E_ResumeGame,typeof(ResumeGameController));
         RegisterController(Consts.E_HitItem,typeof(HitItemController));
+        RegisterController(Consts.E_FinalShowUI,typeof(FinalShowUIController));
+        RegisterController(Consts.E_BriberyClick, typeof(BriberyClickController));
+        RegisterController(Consts.E_ContinueGame, typeof(ContinueGameController));
         //注册model
         RegisterModel(new GameModel());
 

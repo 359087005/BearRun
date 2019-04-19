@@ -50,9 +50,10 @@ public class UIResume : View
         Hide();
 
         //todo
-        GameModel gm = GetModel<GameModel>();
-        gm.m_isPause = false;
-        gm.m_isPlay = true;
+        //GameModel gm = GetModel<GameModel>();
+        //gm.m_isPause = false;
+        //gm.m_isPlay = true;
+        SendEvent(Consts.E_ContinueGame);
     }
 
     public void Show() { gameObject.SetActive(true); }

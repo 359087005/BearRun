@@ -21,12 +21,12 @@ public class ObjectPool : MonoSingleton<ObjectPool>
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public GameObject Spawn(string name,Transform trans)
+    public GameObject Spawn(string name,Transform parent)
     {
         SubPool pool = null;
         if (!m_pools.ContainsKey(name))
         {
-            RegisterNewPool(name,trans);
+            RegisterNewPool(name, parent);
         }
         pool = m_pools[name];
         return pool.Spawn();

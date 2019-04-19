@@ -35,7 +35,7 @@ public class Invincible : Item
         //声音
         Game.Instance.soundManager.PlayEffect("Se_UI_Whist");
         //回收
-        //Game.Instance.objectPool.UnSpawn(gameObject);
-        Destroy(this.gameObject);
+        Game.Instance.objectPool.UnSpawn(gameObject);
+        //Destroy(this.gameObject);
     }
 }

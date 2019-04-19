@@ -24,6 +24,8 @@ public class EnterSceneController : Controller
                 RegisterView(GameObject.Find("Canvas").transform.Find("UIBoard").GetComponent<UIBoard>());
                 RegisterView(GameObject.Find("Canvas").transform.Find("UIPause").GetComponent<UIPause>());
                 RegisterView(GameObject.Find("Canvas").transform.Find("UIResume").GetComponent<UIResume>());
+                RegisterView(GameObject.Find("Canvas").transform.Find("UIDead").GetComponent<UIDead>());
+                RegisterView(GameObject.Find("Canvas").transform.Find("UIFinalScore").GetComponent<UIFinalScore>());
                 break;
         }
     }

@@ -5,17 +5,17 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E95A66D8-9FD4-4851-DCF8-06190396A439}</ProjectGuid>
+    <ProjectGuid>{A8F17C0F-CD5A-EF39-FDA1-0A1D9283ABFB}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
     <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectGenerator>VSTU</UnityProjectGenerator>
-    <UnityProjectType>Game:1</UnityProjectType>
+    <UnityProjectType>Editor:5</UnityProjectType>
     <UnityBuildTarget>Android:13</UnityBuildTarget>
     <UnityVersion>2017.3.0f3</UnityVersion>
     <RootNamespace></RootNamespace>
@@ -289,55 +289,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Application\Args\CoinArgs.cs" />
-    <Compile Include="Assets\Scripts\Application\Args\DistanceArgs.cs" />
-    <Compile Include="Assets\Scripts\Application\Args\ItemArgs.cs" />
-    <Compile Include="Assets\Scripts\Application\Args\PauseArgs.cs" />
-    <Compile Include="Assets\Scripts\Application\Args\ScenesArgs.cs" />
-    <Compile Include="Assets\Scripts\Application\Consts.cs" />
-    <Compile Include="Assets\Scripts\Application\Game.cs" />
-    <Compile Include="Assets\Scripts\Application\Misc\AnimationManager.cs" />
-    <Compile Include="Assets\Scripts\Application\Misc\FollowPlayer.cs" />
-    <Compile Include="Assets\Scripts\Application\Misc\PatternManager.cs" />
-    <Compile Include="Assets\Scripts\Application\Misc\Road.cs" />
-    <Compile Include="Assets\Scripts\Application\Misc\RoadChange.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\Controller\BriberyClickController.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\Controller\ContinueGameController.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\Controller\EndGameController.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\Controller\EnterSceneController.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\Controller\FinalShowUIController.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\Controller\HitItemController.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\Controller\PauseGameController.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\Controller\ResumeGameController.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\Controller\StartUpController.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\Model\GameModel.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\View\PlayerMove.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\View\UIBoard.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\View\UIDead.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\View\UIFinalScore.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\View\UIPause.cs" />
-    <Compile Include="Assets\Scripts\Application\MVC\View\UIResume.cs" />
-    <Compile Include="Assets\Scripts\Application\Objects\Effect.cs" />
-    <Compile Include="Assets\Scripts\Application\Objects\Items\AddTime.cs" />
-    <Compile Include="Assets\Scripts\Application\Objects\Items\Coin.cs" />
-    <Compile Include="Assets\Scripts\Application\Objects\Items\Invincible.cs" />
-    <Compile Include="Assets\Scripts\Application\Objects\Items\Item.cs" />
-    <Compile Include="Assets\Scripts\Application\Objects\Items\Magnet.cs" />
-    <Compile Include="Assets\Scripts\Application\Objects\Items\Multiple.cs" />
-    <Compile Include="Assets\Scripts\Application\Objects\Obstacles\Car.cs" />
-    <Compile Include="Assets\Scripts\Application\Objects\Obstacles\Obstacles.cs" />
-    <Compile Include="Assets\Scripts\Application\Objects\Obstacles\People.cs" />
-    <Compile Include="Assets\Scripts\Application\StaticData\StaticData.cs" />
-    <Compile Include="Assets\Scripts\FrameWork\MVC\Controller.cs" />
-    <Compile Include="Assets\Scripts\FrameWork\MVC\Model.cs" />
-    <Compile Include="Assets\Scripts\FrameWork\MVC\MVC.cs" />
-    <Compile Include="Assets\Scripts\FrameWork\MVC\View.cs" />
-    <Compile Include="Assets\Scripts\FrameWork\Pool\IReusable.cs" />
-    <Compile Include="Assets\Scripts\FrameWork\Pool\ObjectPool.cs" />
-    <Compile Include="Assets\Scripts\FrameWork\Pool\ReusableObject.cs" />
-    <Compile Include="Assets\Scripts\FrameWork\Pool\SubPool.cs" />
-    <Compile Include="Assets\Scripts\FrameWork\Singleton\MonoSingleton.cs" />
-    <Compile Include="Assets\Scripts\FrameWork\Sound\SoundManager.cs" />
+    <ProjectReference Include="BearRun.csproj">
+      <Project>{E95A66D8-9FD4-4851-DCF8-06190396A439}</Project>
+      <Name>BearRun</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Scripts\Editor\SpawnManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Res\Shader\Curved.shader" />

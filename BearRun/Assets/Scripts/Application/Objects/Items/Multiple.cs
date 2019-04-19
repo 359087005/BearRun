@@ -16,8 +16,8 @@ public class Multiple : Item
         Game.Instance.soundManager.PlayEffect("Se_UI_Stars");
 
         //回收
-        //Game.Instance.objectPool.UnSpawn(gameObject);
-        Destroy(this.gameObject);
+        Game.Instance.objectPool.UnSpawn(gameObject);
+        //Destroy(this.gameObject);
     }
 
     public override void OnSpawn()
